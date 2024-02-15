@@ -7,6 +7,12 @@ import { Icon } from '@iconify/vue'
 
 const { currencies, filteredCurrencies } = storeToRefs(useCurrenciesStore())
 
+const { searchQuery } = storeToRefs(useSearchFiltersStore())
+
+const icon = computed(
+  () => currencies.value?.[useExchangeStore()[props.base ? 'baseCharCode' : 'quotedCharCode']]?.icon
+)
+
 function select(charCode: string): void {
   useExchangeStore()[props.base ? 'baseCharCode' : 'quotedCharCode'] = charCode
   useSearchFiltersStore().$reset()
@@ -22,15 +28,8 @@ function select(charCode: string): void {
       aria-expanded="false"
       data-bs-offset="0,20"
     >
-      <Icon
-        :icon="
-          currencies
-            ? currencies[useExchangeStore()[base ? 'baseCharCode' : 'quotedCharCode']].icon
-            : ''
-        "
-        width="32"
-      />
-      {{ useExchangeStore()[base ? 'baseCharCode' : 'quotedCharCode'] }}
+      <Icon :icon="icon" width="32" />
+      {{ useExchangeStore()[props.base ? 'baseCharCode' : 'quotedCharCode'] }}
     </button>
     <div
       class="dropdown-menu border-0 pt-0 mx-0 rounded-3 shadow overflow-auto"
@@ -41,7 +40,7 @@ function select(charCode: string): void {
         <input
           type="search"
           class="form-control bg-dark"
-          v-model="useSearchFiltersStore().searchQuery"
+          v-model="searchQuery"
           autocomplete="false"
           placeholder="Type to filter..."
         />

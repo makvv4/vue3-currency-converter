@@ -1,20 +1,22 @@
 <script setup lang="ts">
-defineProps<{
+const props = defineProps<{
   base?: boolean
 }>()
+
+const { baseCurrencyValue, quotedCurrencyValue } = storeToRefs(useExchangeStore())
 </script>
 
 <template>
   <div class="d-flex align-items-center border rounded-3 p-3 ps-0 gap-3" style="width: 300px">
-    <CurrencyDropdown :base="base" />
+    <CurrencyDropdown :base="props.base" />
 
     <div>
       <input
-        v-if="base"
+        v-if="props.base"
         type="number"
         class="form-control"
         placeholder="Количество"
-        v-model="useExchangeStore().base"
+        v-model="baseCurrencyValue"
       />
       <input
         v-else
@@ -22,7 +24,7 @@ defineProps<{
         class="form-control"
         placeholder="Количество"
         disabled
-        :value="useExchangeStore().quoted"
+        :value="quotedCurrencyValue"
       />
     </div>
   </div>

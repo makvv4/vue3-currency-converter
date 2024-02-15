@@ -1,44 +1,35 @@
+import type { Currency } from 'models/Currency'
+
 export const useCurrenciesStore = defineStore('currencies', () => {
-  const searchFiltersStore = useSearchFiltersStore()
+  const { searchQuery } = storeToRefs(useSearchFiltersStore())
 
-  const currencies: Ref<{ [charCode: string]: CurrencyInfo } | null> = ref(null)
+  const currencies: Ref<{ [charCode: string]: Currency }> = ref({})
 
-  async function getCurrencies() {
-    await fetch('https://www.cbr-xml-daily.ru/daily_json.js')
-      .then((response) => response.json())
-      .then((data: { Valute: { [key: string]: CurrencyInfo } }) => {
-        const modifiedCurrenciesList: { [key: string]: CurrencyInfo } = {}
+  ;(async function () {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/daily_json.js`)
+      const { Valute }: { Valute: { [key: string]: Currency } } = await response.json()
+      currencies.value = Valute
 
-        for (const key in data.Valute) {
-          const charCode = data.Valute[key].CharCode
+      for (const key in Valute) {
+        const charCode = Valute[key].CharCode
 
-          modifiedCurrenciesList[key] = {
-            ...data.Valute[key],
-            icon: `circle-flags:${charCode !== 'XDR' ? charCode.slice(0, 2).toLowerCase() : 'un'}`
-          }
-        }
-
-        currencies.value = modifiedCurrenciesList
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-  }
-
-  getCurrencies()
+        currencies.value[key].icon =
+          `circle-flags:${charCode !== 'XDR' ? charCode.slice(0, 2).toLowerCase() : 'un'}`
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  })()
 
   const filteredCurrencies = computed(() => {
-    const currenciesList = ref(currencies.value)
-    if (currenciesList.value !== null && searchFiltersStore.searchQuery) {
-      currenciesList.value = Object.fromEntries(
-        Object.entries(currenciesList.value).filter(
-          ([, value]) =>
-            value.Name.toLowerCase().includes(searchFiltersStore.searchQuery.toLowerCase()) ||
-            value.CharCode.toLowerCase().includes(searchFiltersStore.searchQuery.toLowerCase())
-        )
+    return Object.fromEntries(
+      Object.entries(currencies.value).filter(
+        ([, value]) =>
+          value.Name.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+          value.CharCode.toLowerCase().includes(searchQuery.value.toLowerCase())
       )
-    }
-    return currenciesList.value
+    )
   })
 
   return {
@@ -46,14 +37,3 @@ export const useCurrenciesStore = defineStore('currencies', () => {
     filteredCurrencies
   }
 })
-
-interface CurrencyInfo {
-  ID: string
-  NumCode: string
-  CharCode: string
-  Nominal: number
-  Name: string
-  Value: number
-  Previous: number
-  icon: string
-}

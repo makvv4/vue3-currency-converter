@@ -1,31 +1,33 @@
 export const useExchangeStore = defineStore('exchange', () => {
-  const currenciesStore = useCurrenciesStore()
+  const { currencies } = storeToRefs(useCurrenciesStore())
 
-  const base: Ref<number> = ref(1)
+  const baseCurrencyValue: Ref<number> = ref(1)
 
   const baseCharCode: Ref<string> = ref('EUR')
   const quotedCharCode: Ref<string> = ref('USD')
 
-  const quoted = computed(() => {
-    if (currenciesStore.currencies) {
+  const quotedCurrencyValue = computed(() => {
+    try {
       return (
-        ((currenciesStore.currencies[baseCharCode.value].Value *
-          currenciesStore.currencies[baseCharCode.value].Nominal) /
-          currenciesStore.currencies[quotedCharCode.value].Value) *
-        currenciesStore.currencies[quotedCharCode.value].Nominal *
-        base.value
+        ((currencies.value[baseCharCode.value].Value *
+          currencies.value[baseCharCode.value].Nominal) /
+          currencies.value[quotedCharCode.value].Value) *
+        currencies.value[quotedCharCode.value].Nominal *
+        baseCurrencyValue.value
       ).toFixed(2)
+    } catch (e) {
+      console.log(e)
+      return 0
     }
-    return 0
   })
 
   function $reset() {
-    base.value = 1
+    baseCurrencyValue.value = 1
   }
 
   return {
-    base,
-    quoted,
+    baseCurrencyValue,
+    quotedCurrencyValue,
     baseCharCode,
     quotedCharCode,
     $reset

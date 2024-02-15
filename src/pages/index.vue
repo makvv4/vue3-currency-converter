@@ -6,7 +6,7 @@ const { filteredCurrencies } = storeToRefs(useCurrenciesStore())
   <main>
     <div>
       <div
-        v-if="filteredCurrencies !== null && Object.keys(filteredCurrencies).length"
+        v-if="filteredCurrencies && Object.keys(filteredCurrencies).length"
         class="gap-3 my-4 d-flex justify-content-center flex-wrap"
       >
         <CurrencyCard

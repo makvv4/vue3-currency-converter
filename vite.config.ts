@@ -18,7 +18,12 @@ export default defineConfig({
     }),
     vue(),
     AutoImport({
-      imports: ['vue', 'pinia', VueRouterAutoImports, { '@vueuse/core': ['useWindowSize'] }],
+      imports: [
+        'vue',
+        'pinia',
+        VueRouterAutoImports,
+        { '@vueuse/core': ['useWindowSize', 'useFetch'] }
+      ],
       dts: 'src/auto-imports.d.ts',
       dirs: ['src/stores'],
       vueTemplate: true
@@ -58,7 +63,8 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      models: fileURLToPath(new URL('./models', import.meta.url))
     }
   }
 })

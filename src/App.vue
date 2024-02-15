@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { Icon } from '@iconify/vue'
+
+const { searchQuery } = storeToRefs(useSearchFiltersStore())
 </script>
 
 <template>
@@ -24,7 +26,7 @@ import { Icon } from '@iconify/vue'
           <input
             type="search"
             class="form-control form-control-dark"
-            v-model="useSearchFiltersStore().searchQuery"
+            v-model="searchQuery"
             placeholder="Поиск валюты..."
             aria-label="Search"
           />
