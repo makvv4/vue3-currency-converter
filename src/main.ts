@@ -1,5 +1,5 @@
-import 'bootstrap/dist/css/bootstrap.min.css'
-import 'bootstrap'
+import '@unocss/reset/tailwind.css'
+import 'virtual:uno.css'
 
 import App from './App.vue'
 import router from './router'

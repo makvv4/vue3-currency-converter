@@ -6,21 +6,22 @@ defineProps<{
   name: string
   icon: string
 }>()
-
-import { Icon } from '@iconify/vue'
 </script>
 
 <template>
-  <div class="list-group-item border rounded-3 p-3" style="width: 300px">
-    <span class="d-flex align-items-center">
-      <Icon :icon="icon" width="32" />
-      <span class="fs-4 ms-3">{{ charCode }}</span>
-      <div class="d-flex align-items-center ms-3">
-        <span class="text-nowrap">{{ value }}</span>
-        <Icon v-if="value > previous" icon="mdi:arrow-up-thin" color="green" width="24" />
-        <Icon v-else icon="mdi:arrow-down-thin" color="red" width="24" />
+  <div class="border rounded-3 p-3 w-75">
+    <div class="stat">
+      <div class="stat-figure text-secondary">
+        <Icon :icon="icon" width="32" />
       </div>
-    </span>
-    <p class="m-0 mt-2 text-secondary">{{ name }}</p>
+      <div class="stat-title">
+        {{ charCode }}
+        <span :class="[value > previous ? 'text-green' : 'text-red']">
+          {{ value > previous ? '↗︎' : '↘︎' }}
+        </span>
+      </div>
+      <div class="stat-value">{{ value }}</div>
+      <div class="stat-desc text-wrap">{{ name }}</div>
+    </div>
   </div>
 </template>

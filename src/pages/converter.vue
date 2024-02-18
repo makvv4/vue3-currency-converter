@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import { Icon } from '@iconify/vue'
 import { useWindowSize } from '@vueuse/core'
 
 const windowWidth = useWindowSize().width
 </script>
 
 <template>
-  <div class="d-flex flex-wrap align-items-center justify-content-center mt-5 gap-3">
+  <div class="flex flex-wrap items-center justify-center mt-5 gap-3">
     <CurrencyExchangeCard base />
 
     <Icon

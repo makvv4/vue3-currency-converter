@@ -6,6 +6,7 @@ export const useExchangeStore = defineStore('exchange', () => {
   const baseCharCode: Ref<string> = ref('EUR')
   const quotedCharCode: Ref<string> = ref('USD')
 
+  // TODO: добавть утилиту для расчёта
   const quotedCurrencyValue = computed(() => {
     try {
       return (

@@ -10,6 +10,7 @@ declare module 'vue' {
     CurrencyCard: typeof import('./components/CurrencyCard.vue')['default']
     CurrencyDropdown: typeof import('./components/CurrencyDropdown.vue')['default']
     CurrencyExchangeCard: typeof import('./components/CurrencyExchangeCard.vue')['default']
+    Icon: typeof import('@iconify/vue')['Icon']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

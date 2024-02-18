@@ -1,41 +1,61 @@
 <script setup lang="ts">
-import { Icon } from '@iconify/vue'
-
 const { searchQuery } = storeToRefs(useSearchFiltersStore())
+
+import { useDark, useToggle } from '@vueuse/core'
+
+const isDark = useDark({
+  selector: 'html',
+  attribute: 'data-theme',
+  valueDark: 'dark',
+  valueLight: 'light'
+})
+const toggleDark = useToggle(isDark)
 </script>
 
 <template>
-  <header class="sticky-top p-2 text-bg-dark">
-    <nav class="container flex-wrap flex-lg-nowrap">
-      <div
-        class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
-      >
-        <RouterLink
-          to="/"
-          class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none"
-        >
-          <Icon icon="arcticons:priceconverter" width="40" color="wheat" />
-        </RouterLink>
-        <ul class="nav col-12 col-lg-auto mb-2 justify-content-center mb-md-0 me">
-          <li><RouterLink to="/" class="nav-link px-2 text-white">Список валют</RouterLink></li>
-          <li>
-            <RouterLink to="/converter" class="nav-link px-2 text-white">Конвертер</RouterLink>
-          </li>
-        </ul>
-        <form v-if="$route.path === '/'" class="my-3 my-lg-0 mx-lg-auto" role="search">
-          <input
-            type="search"
-            class="form-control form-control-dark"
-            v-model="searchQuery"
-            placeholder="Поиск валюты..."
-            aria-label="Search"
-          />
-        </form>
+  <header class="sticky top-0 p-2 bg-dark">
+    <nav class="container mx-auto">
+      <div class="navbar flex-wrap md:flex-nowrap justify-center gap-2">
+        <div class="navbar-start">
+          <RouterLink to="/" class="flex items-center mb-2 lg:mb-0 text-white">
+            <Icon icon="arcticons:priceconverter" width="40" color="wheat" />
+          </RouterLink>
+          <ul class="flex flex-wrap col-12 lg:col-auto mb-2 justify-center md:mb-0 me">
+            <li><RouterLink to="/" class="px-2 text-white">Список валют</RouterLink></li>
+            <li>
+              <RouterLink to="/converter" class="px-2 text-white">Конвертер</RouterLink>
+            </li>
+          </ul>
+        </div>
+
+        <div v-if="$route.path === '/'" class="navbar-center">
+          <label class="input input-bordered flex items-center gap-2">
+            <input
+              type="search"
+              class="grow bg-transparent"
+              v-model="searchQuery"
+              placeholder="Поиск валюты..."
+            />
+
+            <kbd class="kbd kbd-sm">⌘</kbd>
+            <kbd class="kbd kbd-sm">K</kbd>
+          </label>
+        </div>
+
+        <div class="navbar-end">
+          <button @click="toggleDark()" class="text-gray-300 text-2xl">
+            <!-- moon icon -->
+            <Icon v-if="!isDark" icon="line-md:moon-filled-to-sunny-filled-transition" />
+
+            <!-- sun icon -->
+            <Icon v-else icon="line-md:sunny-filled-loop-to-moon-filled-transition" />
+          </button>
+        </div>
       </div>
     </nav>
   </header>
 
-  <RouterView class="container" />
+  <RouterView class="container mx-auto" />
 </template>
 
 <style scoped></style>

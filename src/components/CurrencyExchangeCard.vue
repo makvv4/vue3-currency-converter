@@ -7,21 +7,21 @@ const { baseCurrencyValue, quotedCurrencyValue } = storeToRefs(useExchangeStore(
 </script>
 
 <template>
-  <div class="d-flex align-items-center border rounded-3 p-3 ps-0 gap-3" style="width: 300px">
+  <div class="flex items-center border rounded-3 p-3 ps-0 gap-3">
     <CurrencyDropdown :base="props.base" />
 
     <div>
       <input
         v-if="props.base"
         type="number"
-        class="form-control"
+        class="input input-bordered"
         placeholder="Количество"
         v-model="baseCurrencyValue"
       />
       <input
         v-else
         type="number"
-        class="form-control"
+        class="input input-bordered"
         placeholder="Количество"
         disabled
         :value="quotedCurrencyValue"
